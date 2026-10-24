@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Кинопоиск → kinokino.vip",
-  "version": "1.0.0",
-  "description": "Кнопка ▶ рядом с названием фильма на Кинопоиске: открывает этот фильм на kinokino.vip.",
+  "name": "Play-кнопка для страниц фильмов",
+  "version": "1.0.1",
+  "description": "Кнопка ▶ рядом с названием фильма: в один клик открывает этот фильм на kinokino.vip.",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -10,9 +10,17 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.kinopoisk.ru/*", "https://kinopoisk.ru/*"],
-      "js": ["src/url.js", "src/content.js"],
-      "css": ["src/styles.css"],
+      "matches": [
+        "https://www.kinopoisk.ru/*",
+        "https://kinopoisk.ru/*"
+      ],
+      "js": [
+        "src/url.js",
+        "src/content.js"
+      ],
+      "css": [
+        "src/styles.css"
+      ],
       "run_at": "document_idle"
     }
   ]
