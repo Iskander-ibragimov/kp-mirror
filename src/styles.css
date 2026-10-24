@@ -1,0 +1,52 @@
+#kpm-play {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.9em;
+  height: 0.9em;
+  min-width: 40px;
+  min-height: 40px;
+  margin-right: 0.3em;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: rgba(128, 128, 128, 0.16);
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease, color 0.15s ease;
+  position: relative;
+  top: -0.06em;
+}
+
+#kpm-play svg {
+  width: 45%;
+  height: 45%;
+  fill: currentColor;
+  margin-left: 6%;
+}
+
+#kpm-play:hover {
+  background: #ff5500;
+  color: #fff;
+  transform: scale(1.06);
+}
+
+#kpm-play:focus-visible {
+  outline: 2px solid #ff5500;
+  outline-offset: 2px;
+}
+
+#kpm-play.kpm-floating {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  top: auto;
+  width: 56px;
+  height: 56px;
+  margin: 0;
+  z-index: 2147483647;
+  background: #ff5500;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
