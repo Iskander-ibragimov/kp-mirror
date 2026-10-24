@@ -60,12 +60,31 @@
 
   let observer = null;
   let poll = null;
+  let pending = null;
+  let activeWin = null;
 
-  function start(win) {
+  // Kinopoisk is a React app: touching the title before hydration finishes
+  // causes a hydration mismatch and a header re-render. Wait for full load
+  // plus a short delay before the first injection.
+  function start(win, opts) {
+    const delay = opts && typeof opts.delay === 'number' ? opts.delay : 1000;
+    activeWin = win;
+    const begin = () => {
+      pending = win.setTimeout(() => {
+        pending = null;
+        run(win);
+      }, delay);
+    };
+    if (win.document.readyState === 'complete') begin();
+    else win.addEventListener('load', begin, { once: true });
+  }
+
+  function run(win) {
     const doc = win.document;
+    activeWin = win;
     let scheduled = false;
     let lastHref = win.location.href;
-    const run = () => {
+    const tick = () => {
       scheduled = false;
       lastHref = win.location.href;
       ensureButton(doc, lastHref);
@@ -73,10 +92,10 @@
     const schedule = () => {
       if (!scheduled) {
         scheduled = true;
-        win.setTimeout(run, 0);
+        win.setTimeout(tick, 0);
       }
     };
-    run();
+    tick();
     observer = new win.MutationObserver(schedule);
     observer.observe(doc.documentElement, { childList: true, subtree: true });
     poll = win.setInterval(() => {
@@ -86,9 +105,11 @@
 
   function stop() {
     if (observer) observer.disconnect();
-    if (poll) clearInterval(poll);
+    if (activeWin && poll) activeWin.clearInterval(poll);
+    if (activeWin && pending) activeWin.clearTimeout(pending);
     observer = null;
     poll = null;
+    pending = null;
   }
 
   KPM.ensureButton = ensureButton;

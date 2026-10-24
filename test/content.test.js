@@ -101,9 +101,21 @@ test('click does not bubble to page handlers', () => {
 
 test('start() reacts to DOM changes via observer', async () => {
   const { doc, KPM, win } = setup('<div id="app"></div>');
-  KPM.start(win);
+  KPM.start(win, { delay: 0 });
   doc.getElementById('app').innerHTML = '<h1>Моана</h1>';
   await new Promise((r) => setTimeout(r, 50));
   assert.equal(doc.querySelector('h1').firstChild.id, 'kpm-play');
   KPM.stop();
+});
+
+test('start() waits for page load + delay before first injection (React hydration)', async () => {
+  const { doc, KPM, win } = setup('<h1>Моана</h1>');
+  KPM.start(win, { delay: 100 });
+  try {
+    assert.equal(doc.getElementById('kpm-play'), null, 'injected too early');
+    await new Promise((r) => setTimeout(r, 160));
+    assert.equal(doc.querySelector('h1').firstChild.id, 'kpm-play');
+  } finally {
+    KPM.stop();
+  }
 });
