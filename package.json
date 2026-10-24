@@ -1,0 +1,10 @@
+{
+  "name": "kp-mirror",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.3"
+  }
+}
